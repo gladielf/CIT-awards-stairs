@@ -11,7 +11,6 @@ int i = 0;
 int delaySetup = 200;
 int delayChangeValue = 50;
 int potenciometroDelay = 1;
-int button = 0;
 int programMode = 0;
 int RECV_PIN = 2;
 
