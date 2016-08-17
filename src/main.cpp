@@ -5,7 +5,7 @@ void IRDecoder();
 
 volatile int cont = 0;
 volatile int flag = 0;
-int led[] = {3, 4, 5, 6, 7, 8, 9, 10};
+int led[] = {31, 32, 33, 34, 35, 36, 37, 38};
 int ledLenght = sizeof(led)/sizeof(int);
 int i = 0;
 int delaySetup = 200;
@@ -39,10 +39,10 @@ void loop() {
   }
 
   for(i = 0; i < ledLenght ; i++) {
-    digitalWrite(led[i], HIGH);
+    digitalWrite(led[i], LOW); //Turns ON Relays i
     delay(delaySetup);
     if (delaySetup > 0) {
-      digitalWrite(led[i], LOW);
+      digitalWrite(led[i], HIGH); //Turns OFF Relays i
     }
   }
 }
