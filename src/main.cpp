@@ -3,6 +3,10 @@
 #include <citLib.h>
 
 void IRDecoder();
+void standarProgram(int);
+void reverseStandarProgram(int);
+void allOn();
+void allOff();
 
 volatile int cont = 0;
 volatile int flag = 0;
@@ -11,8 +15,7 @@ int ledLenght = sizeof(led)/sizeof(int);
 int i = 0;
 int delaySetup = 200;
 int delayChangeValue = 50;
-int potenciometroDelay = 1;
-int programMode = 0;
+int programCode = 0;
 int RECV_PIN = 2;
 
 
@@ -31,23 +34,100 @@ void setup() {
 }
 
 void loop() {
-  // delaySetup = analogRead(potenciometroDelay);
 
-  if (flag) {
+  /*if (flag) {
     Serial.print("delaySetup: ");
     Serial.println(delaySetup);
     flag = 0;
+  }*/
+
+  switch (programCode) {
+    case 0:
+        standarProgram(delaySetup);
+        break;
+    case 2:
+        allOn();
+        break;
+    case 3:
+        allOff();
+        break;
+    case 4:
+        standarProgram(50);
+        break;
+    case 5:
+        standarProgram(100);
+        break;
+    case 6:
+        standarProgram(200);
+        break;
+    case 7:
+        standarProgram(1000);
+        break;
+    case 8:
+        reverseStandarProgram(50);
+        break;
+    case 9:
+        reverseStandarProgram(100);
+        break;
+    case 10:
+        reverseStandarProgram(200);
+        break;
+    case 11:
+        reverseStandarProgram(1000);
+        break;
+
+
+    default:
+        break;
   }
 
+  // for(i = 0; i < ledLenght ; i++) {
+  //   digitalWrite(led[i], LOW); //Turns ON Relays i
+  //   delay(delaySetup);
+  //   if (delaySetup > 0) {
+  //     digitalWrite(led[i], HIGH); //Turns OFF Relays i
+  //   }
+  // }
+}
+
+void standarProgram(int delayValue) {
+  //int i;
+  //int ledLenght = sizeof(led)/sizeof(int);
   for(i = 0; i < ledLenght ; i++) {
     digitalWrite(led[i], LOW); //Turns ON Relays i
-    delay(delaySetup);
-    if (delaySetup > 0) {
+    delay(delayValue);
+    if (delayValue > 0) {
       digitalWrite(led[i], HIGH); //Turns OFF Relays i
     }
   }
 }
 
+void reverseStandarProgram(int delayValue) {
+  //int i;
+  //int ledLenght = sizeof(led)/sizeof(int);
+  for(i = ledLenght; i >= 0 ; i--) {
+    digitalWrite(led[i], LOW); //Turns ON Relays i
+    delay(delayValue);
+    if (delayValue > 0) {
+      digitalWrite(led[i], HIGH); //Turns OFF Relays i
+    }
+  }
+}
+
+void allOn() {
+  for(i = 0; i < ledLenght ; i++) {
+    digitalWrite(led[i], LOW); //Turns ON Relays i
+  }
+}
+
+void allOff() {
+  for(i = 0; i < ledLenght ; i++) {
+    digitalWrite(led[i], HIGH); //Turns OFF Relays i
+  }
+}
+
+
+// INTERRUPTION FUNCTION
 void IRDecoder() {
   if (irrecv.decode(&results)) {
     switch (results.value) {
@@ -55,51 +135,61 @@ void IRDecoder() {
       /*** 1ª Fila con botones encencido ***/
       // mas: FF3AC5 >>> 16726725
       case 16726725: // Más velocidad (se REDUCE el delay)
-          if (delaySetup > 0) {
+          if (delaySetup > 50) {
             delaySetup -= delayChangeValue;
           }
-          flag = 1;
+          programCode = 0;
           break;
       // menos: FFBA45 >>> 16759365
       case 16759365: // Menos velocidad (se AUMENTA el delay)
           delaySetup += delayChangeValue;
-          flag = 1;
+          programCode = 0;
           break;
       // Play?: FF827D >>> 16745085
-      case 16745085: //
+      case 16745085: //Enciende todos los led a la vez, NO se apagan
+          programCode = 2;
           break;
       // On/Off: FF02FD >>> 16712445
-      case 16712445: //
+      case 16712445: //Se apagan TODOS los led, NO se encienden
+          programCode = 3;
           break;
 
       //FILA 2
       /*** 1ª Fila de colores con texto RGBW ***/
       // RED R: FF1AE5 >>> 16718565
       case 16718565: //
+          programCode = 4;
           break;
       // GREEN G: FF9A65 >>> 16751205
       case 16751205: //
+          programCode = 5;
           break;
       // BLUE B: FFA25D >>> 16753245
       case 16753245: //
+          programCode = 6;
           break;
       // WHITE W: FF22DD >>> 16720605
       case 16720605: //
+          programCode = 7;
           break;
 
       //FILA 3
       /*** 2ª Fila de colores ***/
       // Naranjita: FF2AD5 >>> 16722645
       case 16722645: //
+          programCode = 8;
           break;
       // Verdecillo: FFAA55 >>> 16755285
       case 16755285: //
+          programCode = 9;
           break;
       // azulillo: FF926D >>> 16749165
       case 16749165: //
+          programCode = 10;
           break;
       // blaco roto?: FF12ED >>> 16716525
       case 16716525: //
+          programCode = 11;
           break;
 
       //FILA 4
