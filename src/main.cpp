@@ -5,6 +5,8 @@
 void IRDecoder();
 void standarProgram(int);
 void reverseStandarProgram(int);
+void fullcicleProgram(int);
+void oneRandomLed(int);
 void allOn();
 void allOff();
 
@@ -15,6 +17,7 @@ int ledLenght = sizeof(led)/sizeof(int);
 int i = 0;
 int delaySetup = 200;
 int delayChangeValue = 50;
+int delayConfiguration[] = {50, 100, 300, 700};
 int programCode = 0;
 int RECV_PIN = 2;
 
@@ -31,6 +34,7 @@ void setup() {
 
   attachInterrupt( 0, IRDecoder, CHANGE);
   irrecv.enableIRIn(); // Start the receiver
+  randomSeed(millis());
 }
 
 void loop() {
@@ -53,44 +57,52 @@ void loop() {
         allOff();
         break;
     case 4:
-        standarProgram(50);
+        standarProgram(delayConfiguration[0]);
         break;
     case 5:
-        standarProgram(100);
+        standarProgram(delayConfiguration[1]);
         break;
     case 6:
-        standarProgram(200);
+        standarProgram(delayConfiguration[2]);
         break;
     case 7:
-        standarProgram(1000);
+        standarProgram(delayConfiguration[3]);
         break;
     case 8:
-        reverseStandarProgram(50);
+        reverseStandarProgram(delayConfiguration[0]);
         break;
     case 9:
-        reverseStandarProgram(100);
+        reverseStandarProgram(delayConfiguration[1]);
         break;
     case 10:
-        reverseStandarProgram(200);
+        reverseStandarProgram(delayConfiguration[2]);
         break;
     case 11:
-        reverseStandarProgram(1000);
+        reverseStandarProgram(delayConfiguration[3]);
         break;
     case 12:
+        fullcicleProgram(delayConfiguration[0]);
         break;
     case 13:
+        fullcicleProgram(delayConfiguration[1]);
         break;
     case 14:
+        fullcicleProgram(delayConfiguration[2]);
         break;
     case 15:
+        fullcicleProgram(delayConfiguration[3]);
         break;
     case 16:
+        oneRandomLed(delayConfiguration[0]);
         break;
     case 17:
+        oneRandomLed(delayConfiguration[1]);
         break;
     case 18:
+        oneRandomLed(delayConfiguration[2]);
         break;
     case 19:
+        oneRandomLed(delayConfiguration[3]);
         break;
     case 20:
         break;
@@ -179,6 +191,30 @@ void reverseStandarProgram(int delayValue) {
   }
 }
 
+void fullcicleProgram(int delayValue) {
+  for(i = 0; i < ledLenght ; i++) {
+    digitalWrite(led[i], LOW); //Turns ON Relays i
+    if (i != ledLenght - 1) {
+      delay(delayValue);
+      digitalWrite(led[i], HIGH); //Turns OFF Relays i
+    }
+  }
+  for(i = ledLenght; i >= 0 ; i--) {
+    digitalWrite(led[i], LOW); //Turns ON Relays i
+    delay(delayValue);
+    // if (delayValue > 0) {
+      digitalWrite(led[i], HIGH); //Turns OFF Relays i
+    // }
+  }
+}
+
+void oneRandomLed(int delayValue){
+  int randomLed = random(ledLenght);
+  digitalWrite(led[randomLed], LOW); //Turns ON Relays i
+  delay(delayValue);
+  digitalWrite(led[randomLed], HIGH); //Turns OFF Relays i
+}
+
 void allOn() {
   for(i = 0; i < ledLenght ; i++) {
     digitalWrite(led[i], LOW); //Turns ON Relays i
@@ -222,76 +258,76 @@ void IRDecoder() {
       //FILA 2
       /*** 1ª Fila de colores con texto RGBW ***/
       // RED R: FF1AE5 >>> 16718565
-      case 16718565: //
+      case 16718565: // programa estandar a velocidad de 50ms
           programCode = 4;
           break;
       // GREEN G: FF9A65 >>> 16751205
-      case 16751205: //
+      case 16751205: // programa estandar a velocidad de 100ms
           programCode = 5;
           break;
       // BLUE B: FFA25D >>> 16753245
-      case 16753245: //
+      case 16753245: // programa estandar a velocidad de 200ms
           programCode = 6;
           break;
       // WHITE W: FF22DD >>> 16720605
-      case 16720605: //
+      case 16720605: // programa estandar a velocidad de 1000ms
           programCode = 7;
           break;
 
       //FILA 3
       /*** 2ª Fila de colores ***/
       // Naranjita: FF2AD5 >>> 16722645
-      case 16722645: //
+      case 16722645: // programa estandar INVERSO a velocidad de 50ms
           programCode = 8;
           break;
       // Verdecillo: FFAA55 >>> 16755285
-      case 16755285: //
+      case 16755285: // programa estandar INVERSO a velocidad de 100ms
           programCode = 9;
           break;
       // azulillo: FF926D >>> 16749165
-      case 16749165: //
+      case 16749165: // programa estandar INVERSO a velocidad de 200ms
           programCode = 10;
           break;
       // blaco roto?: FF12ED >>> 16716525
-      case 16716525: //
+      case 16716525: // programa estandar INVERSO a velocidad de 1000ms
           programCode = 11;
           break;
 
       //FILA 4
       /*** 3ª Fila de colores ***/
       // Amarillo huevo: FF0AF5 >>> 16714485
-      case 16714485: //
+      case 16714485: // Programa que sube y baja a velocidad de Xms
           programCode = 12;
           break;
       // Azul: FF8A75 >>> 16747125
-      case 16747125: //
+      case 16747125: // Programa que sube y baja a velocidad de Xms
           programCode = 13;
           break;
       // Morado: FFB24D >>> 16757325
-      case 16757325: //
+      case 16757325: // Programa que sube y baja a velocidad de Xms
           programCode = 14;
           break;
       // color carne: FF32CD >>> 16724685
-      case 16724685: //
+      case 16724685: // Programa que sube y baja a velocidad de Xms
           programCode = 15;
           break;
 
       //FILA 5
       /*** 4ª Fila de colores ***/
       // Marron: FF38C7 >>> 16726215
-      case 16726215: //
+      case 16726215: // Programa que enciende un led aleatorio durante Xms
           programCode = 16;
           break;
       // verde azulado: FFB847 >>> 16758855
-      case 16758855: //
+      case 16758855: // Programa que enciende un led aleatorio durante Xms
           programCode = 17;
           break;
       // rosita: FF7887 >>> 16742535
-      case 16742535: //
+      case 16742535: // Programa que enciende un led aleatorio durante Xms
           programCode = 18;
           break;
       // azul claro: FFF807 >>> 16775175
-      case 16775175: //
+      case 16775175: // Programa que enciende un led aleatorio durante Xms
           programCode = 19;
           break;
 
