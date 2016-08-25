@@ -43,6 +43,7 @@ void loop() {
 
   switch (programCode) {
     case 0:
+    case 1:
         standarProgram(delaySetup);
         break;
     case 2:
@@ -74,6 +75,70 @@ void loop() {
         break;
     case 11:
         reverseStandarProgram(1000);
+        break;
+    case 12:
+        break;
+    case 13:
+        break;
+    case 14:
+        break;
+    case 15:
+        break;
+    case 16:
+        break;
+    case 17:
+        break;
+    case 18:
+        break;
+    case 19:
+        break;
+    case 20:
+        break;
+    case 21:
+        break;
+    case 22:
+        break;
+    case 23:
+        break;
+    case 24:
+        break;
+    case 25:
+        break;
+    case 26:
+        break;
+    case 27:
+        break;
+    case 28:
+        break;
+    case 29:
+        break;
+    case 30:
+        break;
+    case 31:
+        break;
+    case 32:
+        break;
+    case 33:
+        break;
+    case 34:
+        break;
+    case 35:
+        break;
+    case 36:
+        break;
+    case 37:
+        break;
+    case 38:
+        break;
+    case 39:
+        break;
+    case 40:
+        break;
+    case 41:
+        break;
+    case 42:
+        break;
+    case 43:
         break;
 
 
@@ -143,7 +208,7 @@ void IRDecoder() {
       // menos: FFBA45 >>> 16759365
       case 16759365: // Menos velocidad (se AUMENTA el delay)
           delaySetup += delayChangeValue;
-          programCode = 0;
+          programCode = 1;
           break;
       // Play?: FF827D >>> 16745085
       case 16745085: //Enciende todos los led a la vez, NO se apagan
@@ -196,120 +261,152 @@ void IRDecoder() {
       /*** 3ª Fila de colores ***/
       // Amarillo huevo: FF0AF5 >>> 16714485
       case 16714485: //
+          programCode = 12;
           break;
       // Azul: FF8A75 >>> 16747125
       case 16747125: //
+          programCode = 13;
           break;
       // Morado: FFB24D >>> 16757325
       case 16757325: //
+          programCode = 14;
           break;
       // color carne: FF32CD >>> 16724685
       case 16724685: //
+          programCode = 15;
           break;
 
       //FILA 5
       /*** 4ª Fila de colores ***/
       // Marron: FF38C7 >>> 16726215
       case 16726215: //
+          programCode = 16;
           break;
       // verde azulado: FFB847 >>> 16758855
       case 16758855: //
+          programCode = 17;
           break;
       // rosita: FF7887 >>> 16742535
       case 16742535: //
+          programCode = 18;
           break;
       // azul claro: FFF807 >>> 16775175
       case 16775175: //
+          programCode = 19;
           break;
 
       //FILA 6
       /*** 5ª Fila de colores ***/
       // Amarillo: FF18E7 >>> 16718055
       case 16718055: //
+          programCode = 20;
           break;
       // azul: FF9867 >>> 16750695
       case 16750695: //
+          programCode = 21;
           break;
       // magenta: FF58A7 >>> 16734375
       case 16734375: //
+          programCode = 22;
           break;
       // azul claro: FFD827 >>> 16767015
       case 16767015: //
+          programCode = 23;
           break;
 
       //FILA 7
       /*** 1ª Fila de flechas ***/
       // UP RED: FF28D7 >>> 16722135
       case 16722135: //
+          programCode = 24;
           break;
       // UP GREEN: FFA857 >>> 16754775
       case 16754775: //
+          programCode = 25;
           break;
       // UP BLUE: FF6897 >>> 16738455
       case 16738455: //
+          programCode = 26;
           break;
       // Quick: FFE817 >>> 16771095
       case 16771095: //
+          programCode = 27;
           break;
 
       //FILA 8
       /*** 2ª Fila de flechas ***/
       // DOWN RED: FF08F7 >>> 16713975
       case 16713975: //
+          programCode = 28;
           break;
       // DOWN GREEN: FF8877 >>> 16746615
       case 16746615: //
+          programCode = 29;
           break;
       // DOWN BLUE: FF48B7 >>> 16730295
       case 16730295: //
+          programCode = 30;
           break;
       // Slow: FFC837 >>> 16762935
       case 16762935: //
+          programCode = 31;
           break;
 
       //FILA 9
       /*** 1ª Fila de DIY ***/
       // DIY1: FF30CF >>> 16724175
       case 16724175: //
+          programCode = 32;
           break;
       // DIY2: FFB04F >>> 16756815
       case 16756815: //
+          programCode = 33;
           break;
       // DIY3: FF708F >>> 16740495
       case 16740495: //
+          programCode = 34;
           break;
       // auto: FFF00F >>> 16773135
       case 16773135: //
+          programCode = 35;
           break;
 
       //FILA 10
       /*** 2ª Fila de DIY ***/
       // DIY4: FF10EF >>> 16716015
       case 16716015: //
+          programCode = 36;
           break;
       // DIY5: FF906F >>> 16748655
       case 16748655: //
+          programCode = 37;
           break;
       // DIY6: FF50AF >>> 16732335
       case 16732335: //
+          programCode = 38;
           break;
       // FLASH: FFD02F >>> 16764975
       case 16764975: //
+          programCode = 39;
           break;
 
       //FILA 11
       /*** Fila de Jumps y Fades ***/
       // JUMP3: FF20DF >>> 16720095
       case 16720095: //
+          programCode = 40;
           break;
       // JUMP7: FFA05F >>> 16752735
       case 16752735: //
+          programCode = 41;
           break;
       // FADE3: FF609F >>> 16736415
       case 16736415: //
+          programCode = 42;
           break;
       // FADE7: FFE01F >>> 16769055
       case 16769055: //
+          programCode = 43;
           break;
 
       default:
