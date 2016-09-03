@@ -12,13 +12,13 @@ void allOff();
 
 volatile int cont = 0;
 volatile int flag = 0;
-int led[] = {31, 32, 33, 34, 35, 36, 37, 38};
+int led[] = {31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42};
 int ledLenght = sizeof(led)/sizeof(int);
 int i = 0;
 int delaySetup = 200;
 int delayChangeValue = 50;
-int delayConfiguration[] = {50, 100, 300, 700};
-int programCode = 0;
+int delayConfiguration[] = {150, 200, 250, 500};
+int programCode = 3;
 int RECV_PIN = 2;
 
 
@@ -38,7 +38,6 @@ void setup() {
 }
 
 void loop() {
-
   /*if (flag) {
     Serial.print("delaySetup: ");
     Serial.println(delaySetup);
@@ -47,8 +46,8 @@ void loop() {
 
   switch (programCode) {
     case 0:
+        break;
     case 1:
-        standarProgram(delaySetup);
         break;
     case 2:
         allOn();
@@ -113,18 +112,24 @@ void loop() {
     case 23:
         break;
     case 24:
+        standarProgram(delaySetup);
         break;
     case 25:
+        reverseStandarProgram(delaySetup);
         break;
     case 26:
+        fullcicleProgram(delaySetup);
         break;
     case 27:
         break;
     case 28:
+        standarProgram(delaySetup);
         break;
     case 29:
+        reverseStandarProgram(delaySetup);
         break;
     case 30:
+        fullcicleProgram(delaySetup);
         break;
     case 31:
         break;
@@ -168,8 +173,6 @@ void loop() {
 }
 
 void standarProgram(int delayValue) {
-  //int i;
-  //int ledLenght = sizeof(led)/sizeof(int);
   for(i = 0; i < ledLenght ; i++) {
     digitalWrite(led[i], LOW); //Turns ON Relays i
     delay(delayValue);
@@ -180,8 +183,6 @@ void standarProgram(int delayValue) {
 }
 
 void reverseStandarProgram(int delayValue) {
-  //int i;
-  //int ledLenght = sizeof(led)/sizeof(int);
   for(i = ledLenght; i >= 0 ; i--) {
     digitalWrite(led[i], LOW); //Turns ON Relays i
     delay(delayValue);
@@ -202,9 +203,7 @@ void fullcicleProgram(int delayValue) {
   for(i = ledLenght; i >= 0 ; i--) {
     digitalWrite(led[i], LOW); //Turns ON Relays i
     delay(delayValue);
-    // if (delayValue > 0) {
-      digitalWrite(led[i], HIGH); //Turns OFF Relays i
-    // }
+    digitalWrite(led[i], HIGH); //Turns OFF Relays i
   }
 }
 
@@ -236,14 +235,14 @@ void IRDecoder() {
       /*** 1ª Fila con botones encencido ***/
       // mas: FF3AC5 >>> 16726725
       case 16726725: // Más velocidad (se REDUCE el delay)
-          if (delaySetup > 50) {
-            delaySetup -= delayChangeValue;
-          }
+          // if (delaySetup > 50) {
+          //   delaySetup -= delayChangeValue;
+          // }
           programCode = 0;
           break;
       // menos: FFBA45 >>> 16759365
       case 16759365: // Menos velocidad (se AUMENTA el delay)
-          delaySetup += delayChangeValue;
+          // delaySetup += delayChangeValue;
           programCode = 1;
           break;
       // Play?: FF827D >>> 16745085
@@ -354,14 +353,23 @@ void IRDecoder() {
       /*** 1ª Fila de flechas ***/
       // UP RED: FF28D7 >>> 16722135
       case 16722135: //
+          if (delaySetup > 50) {
+            delaySetup -= delayChangeValue;
+          }
           programCode = 24;
           break;
       // UP GREEN: FFA857 >>> 16754775
       case 16754775: //
+          if (delaySetup > 50) {
+            delaySetup -= delayChangeValue;
+          }
           programCode = 25;
           break;
       // UP BLUE: FF6897 >>> 16738455
       case 16738455: //
+          if (delaySetup > 50) {
+            delaySetup -= delayChangeValue;
+          }
           programCode = 26;
           break;
       // Quick: FFE817 >>> 16771095
@@ -373,14 +381,23 @@ void IRDecoder() {
       /*** 2ª Fila de flechas ***/
       // DOWN RED: FF08F7 >>> 16713975
       case 16713975: //
+          if (delaySetup < 500) {
+            delaySetup += delayChangeValue;
+          }
           programCode = 28;
           break;
       // DOWN GREEN: FF8877 >>> 16746615
       case 16746615: //
+          if (delaySetup < 500) {
+            delaySetup += delayChangeValue;
+          }
           programCode = 29;
           break;
       // DOWN BLUE: FF48B7 >>> 16730295
       case 16730295: //
+          if (delaySetup < 500) {
+            delaySetup += delayChangeValue;
+          }
           programCode = 30;
           break;
       // Slow: FFC837 >>> 16762935
